@@ -32,7 +32,7 @@ export default {
                     message: "Post not found"
                 })
             } else {
-                res.json()
+                res.json(post)
             }
         } catch (error) {
             res.status(400).json({

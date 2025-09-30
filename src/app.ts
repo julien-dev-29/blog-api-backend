@@ -1,5 +1,6 @@
 import "dotenv/config"
-import express from 'express'
+import express from "express"
+import { Request, Response } from "express"
 import cors from 'cors'
 import morgan from 'morgan'
 import passport from "passport"
@@ -50,9 +51,8 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.use('/api', authRouter)
-app.use('/posts', postRouter)
+app.use('/posts', passport.authenticate("jwt", { session: false }), postRouter)
 app.use('/comments', commentRouter)
 
 app.listen(PORT, (err) => {
