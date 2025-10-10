@@ -17,6 +17,27 @@ export default {
             })
         }
     },
+    getByPost: async (req: Request, res: Response) => {
+        try {
+            const postId = Number(req.params.postId)
+            const comments = await prisma.comment.findMany({
+                where: {
+                    postId: postId
+                }
+            })
+            if (!comments) {
+                res.status(404).json({
+                    message: "No comments"
+                })
+            } else {
+                res.json(comments)
+            }
+        } catch (error) {
+            res.status(400).json({
+                error: error.message
+            })
+        }
+    },
     get: async (req: Request, res: Response) => {
         try {
             const id = Number(req.params.commentId)
@@ -40,16 +61,18 @@ export default {
     },
     create: async (req: Request, res: Response) => {
         try {
-            const { content, postId } = req.body
-            if (!content || !postId) {
+            const { content, postId, userId } = req.body
+            const numPostId = Number(postId)
+            if (!content || !postId || !userId) {
                 return res.status(400).json({
-                    message: "Content and postId are required"
+                    message: "Content, userId and postId are required"
                 })
             }
             const newComment = await prisma.comment.create({
                 data: {
+                    userId,
                     content,
-                    postId
+                    postId: numPostId
                 }
             })
             res.status(201).json({

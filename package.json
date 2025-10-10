@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/app.ts",
-    "dev": "tsx watch src/app.ts"
+    "dev": "tsx watch src/app.ts",
+    "migrate": "npx prisma migrate dev"
   },
   "repository": {
     "type": "git",

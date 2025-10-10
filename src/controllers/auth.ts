@@ -16,8 +16,8 @@ export default {
             { session: false },
             (err: Error, user: User, info: { message?: string } | undefined) => {
                 if (err) next(err)
-                if (!user) res.status(401).json({
-                    error: info.message || "Connection failed"
+                if (!user) return res.status(401).json({
+                    error: info?.message || "Connection failed"
                 })
                 const token = jwt.sign(
                     {

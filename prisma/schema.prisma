@@ -34,22 +34,24 @@ model Profile {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   name     String?
   password String
   posts    Post[]
+  comments Comment[]
   profile  Profile?
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  content    String
-  authorName String
-  post       Post     @relation(fields: [postId], references: [id])
-  postId     Int
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
 model Session {
