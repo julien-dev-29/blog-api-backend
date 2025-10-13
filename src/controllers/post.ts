@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from '../../prisma/client.ts'
 export default {
     getAll: async (req: Request, res: Response) => {
+        const search = req.params.q
         try {
             const posts = await prisma.post.findMany()
             if (!posts) {
@@ -66,11 +67,12 @@ export default {
     },
     create: async (req: Request, res: Response) => {
         try {
-            const { title, content } = req.body
+            const { title, content, slug } = req.body
             await prisma.post.create({
                 data: {
                     title: title,
                     content: content,
+                    slug: slug,
                     authorId: 1
                 }
             })
