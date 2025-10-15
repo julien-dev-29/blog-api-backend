@@ -10,6 +10,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store"
 import prisma from '../prisma/client.ts'
 import postRouter from '../src/routes/post.ts'
 import authRouter from "./routes/auth.ts"
+import categoryRouter from "./routes/category.ts"
 import commentRouter from '../src/routes/comment.ts'
 import helmet from "helmet"
 
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 
 app.use('/api', authRouter)
 app.use('/api/posts', postRouter)
+app.use('/api/categories', categoryRouter)
 app.use('/api/comments', passport.authenticate("jwt", { session: false }), commentRouter)
 
 app.listen(PORT, (err) => {

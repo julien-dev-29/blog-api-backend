@@ -1,17 +1,28 @@
 import { Request, Response } from "express";
 import prisma from '../../prisma/client.ts'
+const perPage = 10
 export default {
     getAll: async (req: Request, res: Response) => {
-        const search = req.params.q
+        const page = Number(req.query.p) ?? 1 
+        const offset = (page - 1) * perPage
         try {
-            const posts = await prisma.post.findMany()
+            const [posts, total] = await Promise.all([
+                prisma.post.findMany({
+                    skip: offset,
+                    take: perPage
+                }),
+                prisma.post.count()
+            ])
             if (!posts) {
                 res.status(404).json({
                     message: "No posts"
                 })
-
             } else {
-                res.json(posts)
+                res.json({
+                    posts: posts,
+                    total: Math.ceil(total /perPage),
+                    page: page
+                })
             }
         } catch (error) {
             res.status(400).json({
