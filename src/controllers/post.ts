@@ -3,7 +3,7 @@ import prisma from '../../prisma/client.ts'
 const perPage = 10
 export default {
     getAll: async (req: Request, res: Response) => {
-        const page = Number(req.query.p) ?? 1 
+        const page = Number(req.query.p) ?? 1
         const offset = (page - 1) * perPage
         try {
             const [posts, total] = await Promise.all([
@@ -20,7 +20,7 @@ export default {
             } else {
                 res.json({
                     posts: posts,
-                    total: Math.ceil(total /perPage),
+                    total: Math.ceil(total / perPage),
                     page: page
                 })
             }
@@ -99,11 +99,13 @@ export default {
     update: async (req: Request, res: Response) => {
         try {
             const postId = Number(req.params.postId)
-            const { title, content } = req.body
+            const { title, content, slug } = req.body
             await prisma.post.update({
                 data: {
                     title: title,
-                    content: content
+                    content: content,
+                    slug: slug,
+                    authorId: 1
                 },
                 where: {
                     id: postId
